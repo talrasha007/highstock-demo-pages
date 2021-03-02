@@ -61,6 +61,18 @@ Highcharts.getJSON('https://demo-live-data.highcharts.com/aapl-ohlcv.json', func
     // create the chart
     Highcharts.stockChart('container', {
 
+        scrollbar: {
+          enabled: false
+        },
+
+        navigator: {
+          enabled: false
+        },
+
+        chart: {
+          zoomType: 'x'
+        },
+
         rangeSelector: {
             selected: 2
         },
