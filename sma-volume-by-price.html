@@ -70,7 +70,10 @@ Highcharts.getJSON('https://demo-live-data.highcharts.com/aapl-ohlcv.json', func
         },
 
         chart: {
-          zoomType: 'x'
+          animation: false,
+          zoomType: 'x',
+          panning: true,
+          panKey: 'shift'
         },
 
         rangeSelector: {
@@ -115,6 +118,9 @@ Highcharts.getJSON('https://demo-live-data.highcharts.com/aapl-ohlcv.json', func
         }],
 
         tooltip: {
+            animation: false,
+            enabled: false,
+            followTouchMove: false,
             split: true
         },
 
