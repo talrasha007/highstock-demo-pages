@@ -14,6 +14,7 @@
 </head>
 
 <body>
+<script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
 <script src="https://code.highcharts.com.cn/highstock/highstock.js"></script>
 <script src="https://code.highcharts.com.cn/highstock/modules/data.js"></script>
 <script src="https://code.highcharts.com.cn/highstock/modules/drag-panes.js"></script>
@@ -22,10 +23,37 @@
 <script src="https://code.highcharts.com.cn/highstock/indicators/volume-by-price.js"></script>
 
 
-<div id="container" style="height: 100%; min-width: 100%"></div>
-  
+<div id="container" style="height: 100%; width: 100%"></div>
+<div id="mask" style="height: 100%; width: 100%; position: absolute; top: 0; left: 0;"></div>
+
 <script>
-Highcharts.getJSON('https://demo-live-data.highcharts.com/aapl-ohlcv.json', function (data) {
+let chart;
+const hammertime = new Hammer(document.getElementById('mask'));
+document.getElementById('mask').addEventListener('touchstart', event => {
+  const { pageX, pageY } = event.touches[0];
+  chart.pointer.onContainerMouseDown({
+    type: 'mousedown',
+    pageX,
+    pageY,
+    target: chart.container,
+    shiftKey: true
+  });
+});
+
+hammertime.on('pan', event => {
+  const { x, y } = event.center;
+  chart.pointer.onContainerMouseMove({
+    type: 'mousemove',
+    pageX: x,
+    pageY: y,
+    target: chart.container,
+    shiftKey: true
+  });
+});
+
+document.getElementById('container').addEventListener('mousedown', console.log);
+
+Highcharts.getJSON('./aapl-ohlcv.json', function (data) {
 
     // split the data set into ohlc and volume
     var ohlc = [],
@@ -59,7 +87,7 @@ Highcharts.getJSON('https://demo-live-data.highcharts.com/aapl-ohlcv.json', func
 
 
     // create the chart
-    Highcharts.stockChart('container', {
+    chart = Highcharts.stockChart('container', {
 
         scrollbar: {
           enabled: false
