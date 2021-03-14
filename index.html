@@ -27,11 +27,12 @@
 <div id="mask" style="height: 100%; width: 100%; position: absolute; top: 0; left: 0;"></div>
 
 <script>
-let chart;
+let chart, panning;
 const hammertime = new Hammer(document.getElementById('mask'));
 hammertime.add( new Hammer.Tap({ event: 'doubletap', taps: 2 }));
 
 document.getElementById('mask').addEventListener('touchstart', event => {
+  panning = true;
   chart.series[0].update({ enableMouseTracking: false });
 
   const { pageX, pageY } = event.touches[0];
@@ -49,9 +50,19 @@ document.getElementById('mask').addEventListener('touchend', () => {
   chart.pointer.onContainerMouseLeave({});
 });
 
-hammertime.on('press', () => {
+hammertime.on('press', event => {
+  panning = false;
   chart.pointer.onDocumentMouseUp({});
   chart.series[0].update({ enableMouseTracking: true });
+
+  const { x, y } = event.center;
+  chart.pointer.onContainerMouseMove({
+    type: 'mousemove',
+    pageX: x,
+    pageY: y,
+    target: chart.container,
+    shiftKey: panning
+  });
 });
 
 hammertime.on('pan', event => {
@@ -61,7 +72,7 @@ hammertime.on('pan', event => {
     pageX: x,
     pageY: y,
     target: chart.container,
-    shiftKey: true
+    shiftKey: panning
   });
 });
 
@@ -168,6 +179,7 @@ Highcharts.getJSON('./aapl-ohlcv.json', function (data) {
 
         plotOptions: {
             series: {
+              animation: false,
               enableMouseTracking: false
             }
         },
