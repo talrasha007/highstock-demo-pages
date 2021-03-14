@@ -40,6 +40,10 @@ document.getElementById('mask').addEventListener('touchstart', event => {
   });
 });
 
+document.getElementById('mask').addEventListener('touchend', () => {
+  chart.pointer.onDocumentMouseUp({});
+});
+
 hammertime.on('pan', event => {
   const { x, y } = event.center;
   chart.pointer.onContainerMouseMove({
@@ -154,9 +158,9 @@ Highcharts.getJSON('./aapl-ohlcv.json', function (data) {
 
         plotOptions: {
             series: {
-                dataGrouping: {
-                    units: groupingUnits
-                }
+                // dataGrouping: {
+                //     units: groupingUnits
+                // }
             }
         },
 
