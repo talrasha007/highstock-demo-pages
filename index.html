@@ -29,7 +29,11 @@
 <script>
 let chart;
 const hammertime = new Hammer(document.getElementById('mask'));
+hammertime.add( new Hammer.Tap({ event: 'doubletap', taps: 2 }));
+
 document.getElementById('mask').addEventListener('touchstart', event => {
+  chart.series[0].update({ enableMouseTracking: false });
+
   const { pageX, pageY } = event.touches[0];
   chart.pointer.onContainerMouseDown({
     type: 'mousedown',
@@ -42,6 +46,12 @@ document.getElementById('mask').addEventListener('touchstart', event => {
 
 document.getElementById('mask').addEventListener('touchend', () => {
   chart.pointer.onDocumentMouseUp({});
+  chart.pointer.onContainerMouseLeave({});
+});
+
+hammertime.on('press', () => {
+  chart.pointer.onDocumentMouseUp({});
+  chart.series[0].update({ enableMouseTracking: true });
 });
 
 hammertime.on('pan', event => {
@@ -151,16 +161,14 @@ Highcharts.getJSON('./aapl-ohlcv.json', function (data) {
 
         tooltip: {
             animation: false,
-            enabled: false,
+            enabled: true,
             followTouchMove: false,
             split: true
         },
 
         plotOptions: {
             series: {
-                // dataGrouping: {
-                //     units: groupingUnits
-                // }
+              enableMouseTracking: false
             }
         },
 
@@ -169,15 +177,13 @@ Highcharts.getJSON('./aapl-ohlcv.json', function (data) {
             name: 'AAPL',
             id: 'aapl',
             zIndex: 2,
-            data: ohlc,
-            enableMouseTracking: false
+            data: ohlc
         }, {
             type: 'column',
             name: 'Volume',
             id: 'volume',
             data: volume,
-            yAxis: 1,
-            enableMouseTracking: false
+            yAxis: 1
         }, {
             type: 'vbp',
             linkedTo: 'aapl',
@@ -189,16 +195,14 @@ Highcharts.getJSON('./aapl-ohlcv.json', function (data) {
             },
             zoneLines: {
                 enabled: false
-            },
-            enableMouseTracking: false
+            }
         }, {
             type: 'sma',
             linkedTo: 'aapl',
             zIndex: 1,
             marker: {
                 enabled: false
-            },
-            enableMouseTracking: false
+            }
         }]
     });
 });
