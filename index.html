@@ -51,15 +51,18 @@ document.getElementById('mask').addEventListener('touchend', () => {
   chart.pointer.onContainerMouseLeave({});
 });
 
-function zoom(change) {
+function zoom(change, oldMin, oldMax) {
   const { xData } = chart.series[0];
   const xMin = xData[0];
   const xMax = xData[xData.length - 1];
 
   const { min, max } = chart.xAxis[0].getExtremes();
-  const range = max - min;
-  let newMin = min - range * (1 - change) / 2;
-  let newMax = max + range * (1 - change) / 2;
+  if (!oldMin) oldMin = min;
+  if (!oldMax) oldMax = max;
+
+  const range = oldMax - oldMin;
+  let newMin = oldMin - range * (1 - change) / 2;
+  let newMax = oldMax + range * (1 - change) / 2;
 
   if (newMax - newMin < xMax - xMin) {
     if (newMin < xMin) {
@@ -90,8 +93,9 @@ document.getElementById('mask').addEventListener('keypress', event => {
 });
 
 hammertime.on('pinch', event => {
-  zoom(event.scale);
-  document.getElementById('mask').innerText = event.scale.toString();
+  const { min, max } = chart.xAxis[0].getExtremes();
+  zoom(event.scale, min, max);
+  // document.getElementById('mask').innerText = event.scale.toString();
 });
 
 hammertime.on('press', event => {
