@@ -88,6 +88,10 @@ document.getElementById('mask').addEventListener('keypress', event => {
   }
 });
 
+hammertime.on('pinch', event => {
+  zoom(event.scale);
+});
+
 hammertime.on('press', event => {
   panning = false;
   chart.pointer.onDocumentMouseUp({});
