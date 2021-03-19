@@ -24,7 +24,7 @@
 
 
 <div id="container" style="height: 100%; width: 100%"></div>
-<div id="mask" style="height: 100%; width: 100%; position: absolute; top: 0; left: 0;"></div>
+<div id="mask" tabindex="0" style="height: 100%; width: 100%; position: absolute; top: 0; left: 0;"></div>
 
 <script>
 let chart, panning;
@@ -48,6 +48,44 @@ document.getElementById('mask').addEventListener('touchstart', event => {
 document.getElementById('mask').addEventListener('touchend', () => {
   chart.pointer.onDocumentMouseUp({});
   chart.pointer.onContainerMouseLeave({});
+});
+
+function zoom(change) {
+  const { xData } = chart.series[0];
+  const xMin = xData[0];
+  const xMax = xData[xData.length - 1];
+
+  const { min, max } = chart.xAxis[0].getExtremes();
+  const range = max - min;
+  let newMin = min - range * (1 - change) / 2;
+  let newMax = max + range * (1 - change) / 2;
+
+  if (newMax - newMin < xMax - xMin) {
+    if (newMin < xMin) {
+      newMax += xMin - newMin;
+      newMin = xMin;
+    }
+
+    if (newMax > xMax) {
+      newMin -= newMax - xMax;
+      newMax = xMax;
+    }
+  } else {
+    newMin = xMin;
+    newMax = xMax;
+  }
+
+  chart.xAxis[0].setExtremes(newMin, newMax);
+}
+
+document.getElementById('mask').addEventListener('keypress', event => {
+  if (event.key === '+') {
+    zoom(1.05);
+  }
+
+  if (event.key === '-') {
+    zoom(0.95);
+  }
 });
 
 hammertime.on('press', event => {
