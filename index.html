@@ -92,9 +92,15 @@ document.getElementById('mask').addEventListener('keypress', event => {
   }
 });
 
-hammertime.on('pinch', event => {
+let pMin, pMax;
+hammertime.on('pinchstart', () => {
   const { min, max } = chart.xAxis[0].getExtremes();
-  zoom(event.scale, min, max);
+  pMin = min;
+  pMax = max;
+});
+
+hammertime.on('pinch', event => {
+  zoom(event.scale, pMin, pMax);
   // document.getElementById('mask').innerText = event.scale.toString();
 });
 
