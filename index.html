@@ -105,19 +105,22 @@ hammertime.on('pinch', event => {
   document.getElementById('mask').innerText = event.scale.toString();
 });
 
-hammertime.on('press', event => {
+hammertime.on('press', async event => {
   panning = false;
   chart.pointer.onDocumentMouseUp({});
   chart.series[0].update({ enableMouseTracking: true });
 
   const { x, y } = event.center;
-  chart.pointer.onContainerMouseMove({
-    type: 'mousemove',
-    pageX: x,
-    pageY: y,
-    target: chart.container,
-    shiftKey: panning
-  });
+  for (let i = 0; i < 2; i++) {
+    chart.pointer.onContainerMouseMove({
+      type: 'mousemove',
+      pageX: x + i,
+      pageY: y,
+      target: chart.container,
+      shiftKey: panning
+    });
+    await new Promise(r => setTimeout(r, 10));
+  }
 });
 
 hammertime.on('pan', event => {
@@ -179,7 +182,7 @@ Highcharts.getJSON('./aapl-ohlcv.json', function (data) {
 
         chart: {
           animation: false,
-          zoomType: 'x',
+          // zoomType: 'x',
           panning: true,
           panKey: 'shift'
         },
