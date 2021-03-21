@@ -103,7 +103,7 @@ hammertime.on('pinchstart', () => {
 
 hammertime.on('pinch', event => {
   zoom(event.scale, pMin, pMax);
-  document.getElementById('mask').innerText = event.scale.toString();
+  // document.getElementById('mask').innerText = event.scale.toString();
 });
 
 hammertime.on('press', async event => {
@@ -255,26 +255,28 @@ Highcharts.getJSON('./aapl-ohlcv.json', function (data) {
             id: 'volume',
             data: volume,
             yAxis: 1
-        }, {
-            type: 'vbp',
-            linkedTo: 'aapl',
-            params: {
-                volumeSeriesID: 'volume'
-            },
-            dataLabels: {
-                enabled: false
-            },
-            zoneLines: {
-                enabled: false
-            }
-        }, {
-            type: 'sma',
-            linkedTo: 'aapl',
-            zIndex: 1,
-            marker: {
-                enabled: false
-            }
-        }]
+        }
+        // }, {
+        //     type: 'vbp',
+        //     linkedTo: 'aapl',
+        //     params: {
+        //         volumeSeriesID: 'volume'
+        //     },
+        //     dataLabels: {
+        //         enabled: false
+        //     },
+        //     zoneLines: {
+        //         enabled: false
+        //     }
+        // }, {
+        //     type: 'sma',
+        //     linkedTo: 'aapl',
+        //     zIndex: 1,
+        //     marker: {
+        //         enabled: false
+        //     }
+        // }
+      ]
     });
 });
 </script>
