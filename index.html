@@ -51,7 +51,7 @@ document.getElementById('mask').addEventListener('touchend', () => {
   chart.pointer.onContainerMouseLeave({});
 });
 
-function zoom(change, oldMin, oldMax) {
+function zoom(lvl, oldMin, oldMax) {
   const { xData } = chart.series[0];
   const xMin = xData[0];
   const xMax = xData[xData.length - 1];
@@ -61,8 +61,9 @@ function zoom(change, oldMin, oldMax) {
   if (!oldMax) oldMax = max;
 
   const range = oldMax - oldMin;
-  let newMin = oldMin - range * (1 - change) / 2;
-  let newMax = oldMax + range * (1 - change) / 2;
+  const rangeDelta = range / lvl - range;
+  let newMin = oldMin - rangeDelta / 2;
+  let newMax = oldMax + rangeDelta / 2;
 
   if (newMax - newMin < xMax - xMin) {
     if (newMin < xMin) {
@@ -84,11 +85,11 @@ function zoom(change, oldMin, oldMax) {
 
 document.getElementById('mask').addEventListener('keypress', event => {
   if (event.key === '+') {
-    zoom(1.05);
+    zoom(2);
   }
 
   if (event.key === '-') {
-    zoom(0.95);
+    zoom(0.5);
   }
 });
 
@@ -101,7 +102,7 @@ hammertime.on('pinchstart', () => {
 
 hammertime.on('pinch', event => {
   zoom(event.scale, pMin, pMax);
-  // document.getElementById('mask').innerText = event.scale.toString();
+  document.getElementById('mask').innerText = event.scale.toString();
 });
 
 hammertime.on('press', event => {
