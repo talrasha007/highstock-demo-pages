@@ -30,7 +30,6 @@
 let chart, panning;
 const hammertime = new Hammer(document.getElementById('mask'));
 hammertime.get('pinch').set({ enable: true });
-hammertime.add( new Hammer.Tap({ event: 'doubletap', taps: 2 }));
 
 document.getElementById('mask').addEventListener('touchstart', event => {
   panning = true;
