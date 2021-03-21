@@ -32,17 +32,19 @@ const hammertime = new Hammer(document.getElementById('mask'));
 hammertime.get('pinch').set({ enable: true });
 
 document.getElementById('mask').addEventListener('touchstart', event => {
-  panning = true;
-  chart.series[0].update({ enableMouseTracking: false });
+  if (event.touches.length === 1) {
+    panning = true;
+    chart.series[0].update({ enableMouseTracking: false });
 
-  const { pageX, pageY } = event.touches[0];
-  chart.pointer.onContainerMouseDown({
-    type: 'mousedown',
-    pageX,
-    pageY,
-    target: chart.container,
-    shiftKey: true
-  });
+    const { pageX, pageY } = event.touches[0];
+    chart.pointer.onContainerMouseDown({
+      type: 'mousedown',
+      pageX,
+      pageY,
+      target: chart.container,
+      shiftKey: true
+    });
+  }
 });
 
 document.getElementById('mask').addEventListener('touchend', () => {
