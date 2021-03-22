@@ -144,13 +144,13 @@ Highcharts.getJSON('./aapl-ohlcv.json', function (data) {
         volume = [],
         dataLength = data.length,
         // set the allowed units for data grouping
-        groupingUnits = [[
-            'week',                         // unit name
-            [1]                             // allowed multiples
-        ], [
-            'month',
-            [1, 2, 3, 4, 6]
-        ]],
+        // groupingUnits = [[
+        //     'week',                         // unit name
+        //     [1]                             // allowed multiples
+        // ], [
+        //     'month',
+        //     [1, 2, 3, 4, 6]
+        // ]],
 
         i = 0;
 
@@ -239,7 +239,11 @@ Highcharts.getJSON('./aapl-ohlcv.json', function (data) {
         plotOptions: {
             series: {
               animation: false,
-              enableMouseTracking: false
+              enableMouseTracking: false,
+              dataGrouping: {
+                enabled: false
+                // units: groupingUnits
+              }
             }
         },
 
